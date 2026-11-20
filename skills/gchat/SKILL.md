@@ -1,11 +1,11 @@
 ---
 name: gchat
-description: Используй MCP GChat для поиска чатов и клиентов, работы с тегами и полями организации, управления builder-автоматизациями и разбора их логов.
+description: Используй MCP GChat для чатов, клиентов, баз знаний, медиафайлов, тегов, полей организации, builder-автоматизаций и их логов.
 ---
 
 # GChat MCP
 
-Работай опубликованными инструментами MCP GChat. Схему builder сохраняй одним из двух способов: небольшую — напрямую через `automation_schema_update`, крупную — через [HTTP-загрузку JSON](references/schema-file-upload.md) и `automation_schema_update_from_upload`. Для загрузки подойдёт любой клиент, способный отправить multipart HTTP-запрос с тем же MCP Bearer; доступ к Codex CLI не требуется. Токен определяет организацию: не передавай `organization_id` и не вызывай остальные HTTP API вместо MCP. Ошибку авторизации, валидации или отсутствующий ресурс не трактуй как пустой результат.
+Работай опубликованными инструментами MCP GChat. Схему builder сохраняй одним из двух способов: небольшую — напрямую через `automation_schema_update`, крупную — через [HTTP-загрузку JSON](references/schema-file-upload.md) и `automation_schema_update_from_upload`. Для медиафайлов используй [multipart-загрузку и media MCP tools](references/media-files.md). Для загрузки файлов подойдёт любой клиент, способный отправить multipart HTTP-запрос с тем же MCP Bearer; доступ к Codex CLI не требуется. Токен определяет организацию: не передавай `organization_id`; HTTP используй только для описанных multipart-загрузок и скачивания по временной media-ссылке, остальные операции выполняй через MCP. Ошибку авторизации, валидации или отсутствующий ресурс не трактуй как пустой результат.
 
 ## Правила для любой задачи GChat
 
@@ -23,6 +23,8 @@ description: Используй MCP GChat для поиска чатов и кл
 | Задача | Прочитать обязательно | Дополнительно по содержимому |
 |---|---|---|
 | Найти клиента, чат, теги или поля | [Рабочие сценарии](references/workflows.md), [каталог инструментов](references/tools.md) | Открой группу блоков «клиент и маршрутизация», только если меняешь теги, поля или передачу чата. |
+| Найти базу знаний, искать в ней или добавить текст | [Рабочие сценарии](references/workflows.md#найти-базу-знаний-и-добавить-текст), [каталог инструментов](references/tools.md#базы-знаний) | Для блока builder `knowledge_base_search` дополнительно открой [интеграции](references/builder/blocks/integrations.md). |
+| Загрузить медиафайл для builder, найти файл или получить ссылку на скачивание | [Каталог инструментов](references/tools.md#медиафайлы), [медиафайлы](references/media-files.md) | При добавлении файла в схему также открой профиль нужного блока в [блоках сообщений](references/builder/blocks/messages.md). |
 | Создать автоматизацию только с метаданными / внешним триггером | [Рабочие сценарии](references/workflows.md), [каталог инструментов](references/tools.md) | [Триггеры и условия](references/builder/triggers-and-conditions.md) — чтобы выбрать `trigger_type` и его настройки. Если строится схема, см. следующую строку. |
 | Создать или изменить схему builder | Обязательно: [общий контракт](references/builder.md), [размещение узлов](references/builder/layout.md), [короткие примеры](references/builder/examples.md) | Небольшую схему передай в `automation_schema_update`; если она не помещается в вызов клиента, открой [загрузку JSON-файлом](references/schema-file-upload.md). Затем открой ссылки по используемым triggers, блокам, переменным и выражениям из следующих строк. |
 | Добавить `condition`, `condition_else`, `timeout`, `any_message`, `goto` или ожидание | [Триггеры и условия](references/builder/triggers-and-conditions.md) | Если сравниваешь переменную или пользовательское поле — также [переменные](references/builder/variables.md). `condition.value` — литерал, не Expression Language. |
